@@ -1,0 +1,22 @@
+.DS_Store
+
+# Local audit material
+tmp/
+artifacts/
+*.log
+npm-debug.log*
+
+# Generated output
+node_modules/
+dist/
+build/
+coverage/
+
+# Editor settings
+.idea/
+.vscode/
+
+# Local configuration
+.env
+.env.*
+!.env.example

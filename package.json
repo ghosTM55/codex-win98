@@ -1,0 +1,22 @@
+{
+  "name": "codex-win98-theme",
+  "version": "0.4.0",
+  "private": true,
+  "description": "A session-only Windows 98 skin for the Codex view in the ChatGPT desktop app.",
+  "license": "PolyForm-Noncommercial-1.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "node --check scripts/theme-tools.mjs && node --check scripts/pack-theme.mjs && node --check scripts/theme-session.mjs && node tests/static-check.mjs",
+    "theme:pack": "node scripts/pack-theme.mjs",
+    "theme:apply": "node scripts/theme-session.mjs apply",
+    "theme:apply:restart": "node scripts/theme-session.mjs apply --restart-existing",
+    "theme:restore": "node scripts/theme-session.mjs restore",
+    "verify": "npm run test && npm run theme:pack"
+  },
+  "engines": {
+    "node": ">=22.4"
+  },
+  "devDependencies": {
+    "@codedrobe/core": "0.7.0-beta.0"
+  }
+}

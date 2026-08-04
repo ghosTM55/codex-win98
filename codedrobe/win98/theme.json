@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "id": "codex-win98",
+  "displayName": "Codex 98",
+  "version": "0.4.0",
+  "catalog": {
+    "categories": [
+      "other"
+    ],
+    "name": {
+      "en": "Codex 98",
+      "zh": "Codex 98"
+    },
+    "description": {
+      "en": "A noncommercial, session-only Windows 98 skin for the Codex view in the ChatGPT desktop app.",
+      "zh": "用于 ChatGPT 桌面客户端 Codex 视图的非商用、仅当前会话生效的 Windows 98 皮肤。"
+    }
+  },
+  "targets": {
+    "codex": {
+      "css": "codex.css",
+      "verification": {
+        "required": [
+          {
+            "name": "codex-main-surface",
+            "any": [
+              "main.main-surface"
+            ]
+          }
+        ],
+        "recommended": [
+          {
+            "name": "sidebar",
+            "any": [
+              "aside.app-shell-left-panel"
+            ]
+          },
+          {
+            "name": "composer",
+            "any": [
+              ".composer-surface-chrome"
+            ]
+          }
+        ],
+        "contexts": [
+          {
+            "name": "home",
+            "when": {
+              "any": [
+                "[role='main']:has([data-testid='home-icon'])"
+              ]
+            },
+            "recommended": [
+              {
+                "name": "home-suggestions",
+                "any": [
+                  ".group\\/home-suggestions"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
