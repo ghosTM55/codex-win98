@@ -1,6 +1,7 @@
 import { access, readFile } from "node:fs/promises";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
+import { CODEX_MAIN_ROOTS, createCodex98Adapter } from "../scripts/codex-adapter.mjs";
 
 const projectRoot = fileURLToPath(new URL("../", import.meta.url));
 const read = (relativePath) => readFile(new URL(`../${relativePath}`, import.meta.url), "utf8");
@@ -52,8 +53,8 @@ assert(
   "full skin must remain session-only and not persist host appearance settings",
 );
 assert(
-  theme.targets.codex.verification?.required?.some(
-    ({ any }) => Array.isArray(any) && any.includes("main.main-surface"),
+  theme.targets.codex.verification?.required?.some(({ any }) =>
+    CODEX_MAIN_ROOTS.every((selector) => any?.includes(selector)),
   ),
   "theme does not require the Codex main surface",
 );
@@ -93,8 +94,36 @@ assert(sessionScript.includes("--restart-existing"), "explicit restart forwardin
 assert(!sessionScript.includes("--timeout-ms"), "session script forwards an unsupported timeout option");
 assert(!sessionScript.includes('"--port", "9335"'), "session script hardcodes a port");
 
+const codexAdapter = createCodex98Adapter();
+assert(
+  CODEX_MAIN_ROOTS.includes("main:has(.composer-surface-chrome)") &&
+    CODEX_MAIN_ROOTS.includes("main.main-surface"),
+  "Codex adapter does not support both current and legacy main-surface landmarks",
+);
+assert(
+  codexAdapter.matchTarget({
+    type: "page",
+    url: "app://-/index.html",
+  }),
+  "Codex adapter rejects the primary desktop renderer",
+);
+assert(
+  !codexAdapter.matchTarget({
+    type: "page",
+    url: "app://-/avatar-overlay-composition-surface.html?surfaceId=activity-slot-0",
+  }),
+  "Codex adapter captures Office Pet composition surfaces",
+);
+assert(
+  !codexAdapter.matchTarget({
+    type: "page",
+    url: "app://-/index.html?initialRoute=%2Favatar-overlay",
+  }),
+  "Codex adapter captures the legacy avatar overlay route",
+);
+
 const scope =
-  '[data-codedrobe-host="codex"][data-codedrobe-theme="codex-win98"]:has(main.main-surface)';
+  '[data-codedrobe-host="codex"][data-codedrobe-theme="codex-win98"]:has(main.main-surface, main .composer-surface-chrome)';
 assert(codexCss.includes(scope), "Codex CSS lacks exact theme and main-surface scoping");
 assert(!codexCss.includes("codex-skin"), "Codex CSS still depends on the legacy renderer profile");
 assert(
@@ -162,6 +191,37 @@ assert(
   readme.includes("Windows") && readmeZh.includes("Windows"),
   "README files do not document Windows support",
 );
+assert(
+  readme.includes("### macOS prompt") &&
+    readme.includes("### Windows 11 prompt") &&
+    readmeZh.includes("### macOS 提示词") &&
+    readmeZh.includes("### Windows 11 提示词"),
+  "README files do not provide separate AI installation prompts for macOS and Windows",
+);
+assert(
+  readme.includes("https://github.com/ghosTM55/codex-win98") &&
+    readmeZh.includes("https://github.com/ghosTM55/codex-win98"),
+  "AI installation prompts do not reference the canonical repository",
+);
+assert(
+  readme.includes("Office Pet") &&
+    readmeZh.includes("Office Pet") &&
+    readme.includes("https://learn.chatgpt.com/docs/pets?surface=app") &&
+    readmeZh.includes("https://learn.chatgpt.com/docs/pets?surface=app"),
+  "README files do not document the recommended Office Pet combination",
+);
+assert(
+  readme.includes("docs/assets/codex-98-office-pet.png") &&
+    readmeZh.includes("docs/assets/codex-98-office-pet.png"),
+  "README files do not reference the public preview image",
+);
+assert(
+  readme.includes("## Start the theme manually") &&
+    readmeZh.includes("## 手动启动主题") &&
+    readme.includes("npm run theme:restore") &&
+    readmeZh.includes("npm run theme:restore"),
+  "README files do not provide concise manual start and restore instructions",
+);
 
 const sessionScriptPath = fileURLToPath(new URL("../scripts/theme-session.mjs", import.meta.url));
 for (const [args, expectedMessage] of [
@@ -184,6 +244,7 @@ for (const [args, expectedMessage] of [
 
 for (const relativePath of [
   ".github/workflows/verify.yml",
+  "docs/assets/codex-98-office-pet.png",
   "docs/compatibility.md",
   "SECURITY.md",
   "THIRD_PARTY_NOTICES.md",

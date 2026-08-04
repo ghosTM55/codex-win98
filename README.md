@@ -9,6 +9,10 @@ The full skin is applied for the current desktop session only. It does not modif
 > [!IMPORTANT]
 > Codex 98 is an independent project and is not affiliated with, endorsed by, or sponsored by Microsoft, OpenAI, or CodeDrobe.
 
+## Preview
+
+![Codex 98 theme with Office Pet](docs/assets/codex-98-office-pet.png)
+
 ## Platform support
 
 | Platform | Full skin | Native fallback | Notes |
@@ -25,90 +29,71 @@ See [Compatibility](docs/compatibility.md) for the tested runtime baseline, isol
 - The current [ChatGPT desktop app](https://learn.chatgpt.com/docs/app) with access to the Codex view
 - macOS or Windows 11
 - Node.js 22.4 or newer
-- npm
+- Git and npm
 
 The project pins `@codedrobe/core@0.7.0-beta.0`. The version is intentionally fixed because desktop discovery and renderer isolation are compatibility-sensitive.
 
-## Install from source
+## Recommended companion: Office Pet
 
-Download or clone the repository, then run:
+For the most convincing classic desktop combination, select **Office Pet** in **Settings → Pets**, then enter `/pet` in a task or choose **Wake Pet** from the command menu. If Office Pet is not present in your Pets picker, choose another office-style pet available in your client.
 
-```sh
-npm ci
-npm run verify
-```
+Pets are a built-in ChatGPT desktop feature and are not installed, bundled, or modified by this theme. See the official [Pets guide](https://learn.chatgpt.com/docs/pets?surface=app).
 
-`npm run verify` validates the manifest, scripts, platform fallbacks, and CSS boundaries, then creates:
+## Install with an AI coding agent
+
+Give the prompt for your platform to an AI coding agent with local terminal access.
+
+### macOS prompt
 
 ```text
-dist/codex-win98-0.4.0.codedrobe-theme
+Install Codex 98 from https://github.com/ghosTM55/codex-win98 on this Mac. Check that Git, npm, and Node.js 22.4 or newer are available. Use ~/Projects/codex-win98: clone it if absent, or update it without discarding local changes. Run npm ci and npm run verify. Do not modify ChatGPT.app, app.asar, binaries, code signatures, shell profiles, or persistent system settings. Report the result and any error.
 ```
 
-The generated package contains only the theme manifest and CSS. It does not contain executable theme JavaScript.
+### Windows 11 prompt
 
-## Apply the full skin
+```text
+Using PowerShell, install Codex 98 from https://github.com/ghosTM55/codex-win98 on this Windows 11 PC. Check that Git, npm, and Node.js 22.4 or newer are available. Use $env:USERPROFILE\Projects\codex-win98: clone it if absent, or update it without discarding local changes. Run npm ci and npm run verify. Do not modify the installed app package, app.asar, binaries, code signatures, PowerShell profiles, registry, or persistent system settings. Report the result and any error.
+```
 
-Save any work in the desktop app, switch to the Codex view, and run:
+`npm run verify` checks the project and builds `dist/codex-win98-0.4.0.codedrobe-theme`.
+
+## Start the theme manually
+
+From the repository:
 
 ```sh
 npm run theme:apply
 ```
 
-The default command never closes an existing desktop app. If the app is already running without the required loopback debugging flag, the command exits with `CODEDROBE_RESTART_REQUIRED` and leaves the app untouched.
-
-After saving all work, an explicit restart can be requested with:
+This command never closes an existing app. If it returns `CODEDROBE_RESTART_REQUIRED`, save your work first, then run:
 
 ```sh
 npm run theme:apply:restart
 ```
 
-This command closes the existing ChatGPT desktop process before relaunching it through CodeDrobe.
-
-### Custom application paths
-
-macOS:
+If app discovery fails:
 
 ```sh
+# macOS
 npm run theme:apply -- --app-path "/Applications/ChatGPT.app"
+
+# Windows PowerShell
+npm run theme:apply -- --app-path "C:\Path\To\ChatGPT.exe"
 ```
-
-Windows PowerShell or Command Prompt:
-
-```powershell
-npm run theme:apply -- --app-path "D:\Path\To\ChatGPT.exe"
-```
-
-The Windows Microsoft Store installation is normally discovered automatically. `--app-path` may point to an application bundle, installation directory, or executable.
-
-### Apply a GitHub Release package
-
-If a `.codedrobe-theme` file was downloaded from GitHub Releases, it can be applied without cloning the source repository:
-
-```sh
-npx --yes --package=@codedrobe/core@0.7.0-beta.0 codedrobe apply --app codex --theme "./codex-win98-0.4.0.codedrobe-theme"
-```
-
-Add `--restart-existing` only after saving work and accepting that the existing desktop process will be closed.
 
 ## Restore the original interface
-
-From a source checkout:
 
 ```sh
 npm run theme:restore
 ```
 
-When using the release package directly:
-
-```sh
-npx --yes --package=@codedrobe/core@0.7.0-beta.0 codedrobe restore --app codex
-```
-
-The full skin is session-only, so an ordinary app launch without CodeDrobe also removes the injected CSS. If a non-default port was used to apply the theme, pass the same port when restoring:
+If the theme was applied on another port, restore with the same port:
 
 ```sh
 npm run theme:restore -- --port 9440
 ```
+
+The full skin is session-only. Launching ChatGPT normally without CodeDrobe also restores the original interface.
 
 ## Native fallback
 

@@ -1,4 +1,11 @@
-import { ensureRuntimeInstalled, packTheme, runCodeDrobe } from "./theme-tools.mjs";
+import {
+  applySkin,
+  readThemePackage,
+  resolveThemeTarget,
+  restoreSkin,
+} from "@codedrobe/core";
+import { createCodex98Adapter } from "./codex-adapter.mjs";
+import { ensureRuntimeInstalled, packTheme } from "./theme-tools.mjs";
 
 const [action, ...forwardedArgs] = process.argv.slice(2);
 if (!["apply", "restore"].includes(action)) {
@@ -37,14 +44,35 @@ if (portIndex >= 0) {
   }
 }
 
-const args = [action, "--app", "codex"];
-if (action === "apply") {
-  const themePath = await packTheme();
-  args.push("--theme", themePath);
-} else {
-  await ensureRuntimeInstalled();
-}
-args.push(...forwardedArgs);
+const valueFor = (flag) => {
+  const index = forwardedArgs.indexOf(flag);
+  return index >= 0 ? forwardedArgs[index + 1] : undefined;
+};
 
-const status = runCodeDrobe(args);
-if (status !== 0) process.exitCode = status;
+const adapter = createCodex98Adapter();
+const requestedPort = valueFor("--port");
+const port = requestedPort === undefined ? adapter.defaultPort : Number(requestedPort);
+
+try {
+  let result;
+  if (action === "apply") {
+    const themePath = await packTheme();
+    const bundle = await readThemePackage(themePath);
+    const targetTheme = resolveThemeTarget(bundle, adapter.id);
+    result = await applySkin({
+      adapter,
+      targetTheme,
+      port,
+      appPath: valueFor("--app-path"),
+      restartExisting: forwardedArgs.includes("--restart-existing"),
+    });
+  } else {
+    await ensureRuntimeInstalled();
+    result = await restoreSkin({ adapter, port });
+  }
+  console.log(JSON.stringify(result, null, 2));
+} catch (error) {
+  console.error(`[codedrobe] ${error.message}`);
+  if (error.results) console.error(JSON.stringify(error.results, null, 2));
+  process.exitCode = 1;
+}

@@ -12,7 +12,7 @@ The full skin relies on private desktop DOM landmarks. OpenAI's supported [Appea
 
 | Platform | Host discovery | Runtime flow | Codex 98 visual QA | Status |
 |---|---|---|---|---|
-| macOS desktop app | Automatic for standard installations | Apply and restore exercised | Main Codex routes reviewed; exact app build was not recorded | Preview |
+| macOS desktop app | Automatic for standard installations | Apply and restore exercised | App version `26.727.51351`, build `6119`; main Codex route and Office Pet target isolation reviewed | Preview |
 | Windows 11 Microsoft Store app | Automatic through the CodeDrobe adapter | Apply/restart flow verified upstream | Full theme route and scaling pass pending | Experimental |
 | Windows custom installation | `--app-path` when discovery fails | Uses the same adapter | Not verified | Experimental |
 | Linux | No supported desktop host | Not supported | Not applicable | Unsupported |
@@ -26,9 +26,9 @@ The stylesheet activates only when the renderer has all of the following:
 
 1. `data-codedrobe-host="codex"`
 2. `data-codedrobe-theme="codex-win98"`
-3. `main.main-surface`
+3. A current `main:has(.composer-surface-chrome)` or legacy `main.main-surface` landmark
 
-The manifest also requires the Codex main surface before applying. These guards reduce the chance of styling secondary or non-Codex surfaces, but cannot guarantee isolation if a future app version changes or reuses the same private landmarks.
+The project adapter accepts only the primary `app://-/index.html` renderer and excludes both current Office Pet composition surfaces and the legacy avatar-overlay route. The manifest also requires the Codex main surface before applying. These guards reduce the chance of styling secondary or non-Codex surfaces, but cannot guarantee isolation if a future app version changes or reuses the same private landmarks.
 
 If styles appear in Chat, Work, or an auxiliary window, run `npm run theme:restore` immediately and report the operating system, app version, current view, and whether the app was already running. Do not publish conversation text, paths, form values, links, or media URLs.
 

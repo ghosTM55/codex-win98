@@ -1,4 +1,4 @@
-:root[data-codedrobe-host="codex"][data-codedrobe-theme="codex-win98"]:has(main.main-surface) {
+:root[data-codedrobe-host="codex"][data-codedrobe-theme="codex-win98"]:has(main.main-surface, main .composer-surface-chrome) {
   color-scheme: light !important;
 
   /* Windows 98 system roles */
@@ -66,7 +66,7 @@
   font-family: var(--win98-ui-font) !important;
 }
 
-@scope (html[data-codedrobe-host="codex"][data-codedrobe-theme="codex-win98"]:has(main.main-surface)) {
+@scope (html[data-codedrobe-host="codex"][data-codedrobe-theme="codex-win98"]:has(main.main-surface, main .composer-surface-chrome)) {
 :scope,
 :scope body {
   background: var(--win98-face) !important;
@@ -99,7 +99,7 @@
   backdrop-filter: none !important;
 }
 
-:scope main.main-surface {
+:scope main:is(.main-surface, :has(.composer-surface-chrome)) {
   position: relative !important;
   margin: 0 !important;
   border: 0 !important;
@@ -109,7 +109,7 @@
   backdrop-filter: none !important;
 }
 
-:scope main.main-surface > header,
+:scope main:is(.main-surface, :has(.composer-surface-chrome)) > header,
 :scope header.app-header-tint {
   min-height: 44px !important;
   border: 0 !important;

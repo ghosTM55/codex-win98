@@ -9,6 +9,10 @@ Codex 98 是用于 ChatGPT 桌面客户端 **Codex 视图**的非官方 Windows 
 > [!IMPORTANT]
 > Codex 98 是独立项目，与 Microsoft、OpenAI、CodeDrobe 不存在从属、背书或赞助关系。
 
+## 效果预览
+
+![Codex 98 主题与 Office Pet 组合效果](docs/assets/codex-98-office-pet.png)
+
 ## 平台支持
 
 | 平台 | 完整皮肤 | 原生降级版 | 说明 |
@@ -25,90 +29,71 @@ Codex 98 是用于 ChatGPT 桌面客户端 **Codex 视图**的非官方 Windows 
 - 当前版 [ChatGPT 桌面客户端](https://learn.chatgpt.com/docs/app)，并具有 Codex 使用权限
 - macOS 或 Windows 11
 - Node.js 22.4 或更高版本
-- npm
+- Git 和 npm
 
 项目固定使用 `@codedrobe/core@0.7.0-beta.0`。桌面客户端发现和渲染器隔离对版本敏感，因此不会自动升级运行时。
 
-## 从源码安装
+## 推荐组合：Office Pet
 
-下载或克隆仓库后运行：
+为了获得更完整的经典桌面组合效果，建议在 **Settings → Pets** 中选择 **Office Pet**，然后在任务中输入 `/pet`，或从命令菜单选择 **Wake Pet**。如果客户端的 Pets 列表中没有 Office Pet，可选择现有的其他办公风格 Pet。
 
-```sh
-npm ci
-npm run verify
-```
+Pet 是 ChatGPT 桌面客户端的内置功能，本主题不会安装、捆绑或修改 Pet。具体用法见官方 [Pets 指南](https://learn.chatgpt.com/docs/pets?surface=app)。
 
-`npm run verify` 会验证主题清单、脚本、平台降级配置和 CSS 边界，并生成：
+## 交给 AI 编程代理安装
+
+将对应平台的提示词交给具有本机终端权限的 AI 编程代理。
+
+### macOS 提示词
 
 ```text
-dist/codex-win98-0.4.0.codedrobe-theme
+请在这台 Mac 上安装 Codex 98：https://github.com/ghosTM55/codex-win98。检查 Git、npm 和 Node.js 22.4 或更高版本。使用 ~/Projects/codex-win98：目录不存在时克隆，已存在时在不丢弃本地改动的前提下更新。运行 npm ci 和 npm run verify。不得修改 ChatGPT.app、app.asar、二进制文件、代码签名、Shell 配置文件或持久化系统设置。最后报告结果和错误。
 ```
 
-生成的主题包只包含主题清单和 CSS，不包含可执行的主题 JavaScript。
+### Windows 11 提示词
 
-## 应用完整皮肤
+```text
+请使用 PowerShell 在这台 Windows 11 电脑上安装 Codex 98：https://github.com/ghosTM55/codex-win98。检查 Git、npm 和 Node.js 22.4 或更高版本。使用 $env:USERPROFILE\Projects\codex-win98：目录不存在时克隆，已存在时在不丢弃本地改动的前提下更新。运行 npm ci 和 npm run verify。不得修改已安装的应用包、app.asar、二进制文件、代码签名、PowerShell 配置文件、注册表或持久化系统设置。最后报告结果和错误。
+```
 
-保存桌面客户端中的工作，切换到 Codex 视图，然后运行：
+`npm run verify` 会检查项目并生成 `dist/codex-win98-0.4.0.codedrobe-theme`。
+
+## 手动启动主题
+
+在仓库目录运行：
 
 ```sh
 npm run theme:apply
 ```
 
-默认命令不会关闭已经运行的桌面客户端。如果客户端启动时没有开启所需的本机调试参数，命令会以 `CODEDROBE_RESTART_REQUIRED` 退出，且不会改动现有进程。
-
-保存全部工作后，可以显式允许重启：
+该命令不会关闭正在运行的客户端。如果返回 `CODEDROBE_RESTART_REQUIRED`，先保存工作，再运行：
 
 ```sh
 npm run theme:apply:restart
 ```
 
-该命令会先关闭现有 ChatGPT 桌面客户端进程，再通过 CodeDrobe 重新启动。
-
-### 自定义客户端路径
-
-macOS：
+无法自动发现客户端时：
 
 ```sh
+# macOS
 npm run theme:apply -- --app-path "/Applications/ChatGPT.app"
+
+# Windows PowerShell
+npm run theme:apply -- --app-path "C:\Path\To\ChatGPT.exe"
 ```
-
-Windows PowerShell 或命令提示符：
-
-```powershell
-npm run theme:apply -- --app-path "D:\Path\To\ChatGPT.exe"
-```
-
-Windows Microsoft Store 客户端通常可以自动发现。`--app-path` 可以指向应用程序包、安装目录或可执行文件。
-
-### 使用 GitHub Release 主题包
-
-从 GitHub Releases 下载 `.codedrobe-theme` 文件后，无需克隆源码即可应用：
-
-```sh
-npx --yes --package=@codedrobe/core@0.7.0-beta.0 codedrobe apply --app codex --theme "./codex-win98-0.4.0.codedrobe-theme"
-```
-
-只有在工作已保存，并明确接受关闭现有桌面客户端进程时，才附加 `--restart-existing`。
 
 ## 恢复原始界面
-
-从源码目录恢复：
 
 ```sh
 npm run theme:restore
 ```
 
-直接使用 Release 主题包时：
-
-```sh
-npx --yes --package=@codedrobe/core@0.7.0-beta.0 codedrobe restore --app codex
-```
-
-完整皮肤仅在当前会话生效；不通过 CodeDrobe 普通启动客户端，也会移除注入的 CSS。如果应用主题时使用了非默认端口，恢复时需要传入相同端口：
+如果应用主题时使用了其他端口，恢复时传入相同端口：
 
 ```sh
 npm run theme:restore -- --port 9440
 ```
+
+完整皮肤仅在当前会话生效；不通过 CodeDrobe 普通启动 ChatGPT 也会恢复原始界面。
 
 ## 原生降级版
 

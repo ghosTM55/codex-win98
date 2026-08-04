@@ -24,6 +24,7 @@
           {
             "name": "codex-main-surface",
             "any": [
+              "main:has(.composer-surface-chrome)",
               "main.main-surface"
             ]
           }
