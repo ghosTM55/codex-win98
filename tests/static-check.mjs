@@ -206,6 +206,8 @@ assert(
 assert(
   readme.includes("Office Pet") &&
     readmeZh.includes("Office Pet") &&
+    readme.includes("https://github.com/Dimava/codex-clippy") &&
+    readmeZh.includes("https://github.com/Dimava/codex-clippy") &&
     readme.includes("https://learn.chatgpt.com/docs/pets?surface=app") &&
     readmeZh.includes("https://learn.chatgpt.com/docs/pets?surface=app"),
   "README files do not document the recommended Office Pet combination",
@@ -218,6 +220,14 @@ assert(
 assert(
   readme.includes("## Start the theme manually") &&
     readmeZh.includes("## 手动启动主题") &&
+    readme.includes("cd /path/to/codex-win98") &&
+    readmeZh.includes("cd /path/to/codex-win98") &&
+    readme.includes('Set-Location "C:\\path\\to\\codex-win98"') &&
+    readmeZh.includes('Set-Location "C:\\path\\to\\codex-win98"') &&
+    !readme.includes("~/Projects/codex-win98") &&
+    !readmeZh.includes("~/Projects/codex-win98") &&
+    !readme.includes("$env:USERPROFILE\\Projects\\codex-win98") &&
+    !readmeZh.includes("$env:USERPROFILE\\Projects\\codex-win98") &&
     readme.includes("npm run theme:restore") &&
     readmeZh.includes("npm run theme:restore"),
   "README files do not provide concise manual start and restore instructions",

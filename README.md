@@ -35,9 +35,9 @@ The project pins `@codedrobe/core@0.7.0-beta.0`. The version is intentionally fi
 
 ## Recommended companion: Office Pet
 
-For the most convincing classic desktop combination, select **Office Pet** in **Settings → Pets**, then enter `/pet` in a task or choose **Wake Pet** from the command menu. If Office Pet is not present in your Pets picker, choose another office-style pet available in your client.
+The preview uses [Clippy (Office Pet)](https://github.com/Dimava/codex-clippy). Install or select it separately, then enter `/pet` in a task or choose **Wake Pet** from the command menu.
 
-Pets are a built-in ChatGPT desktop feature and are not installed, bundled, or modified by this theme. See the official [Pets guide](https://learn.chatgpt.com/docs/pets?surface=app).
+Pets are a built-in ChatGPT desktop feature. Codex 98 does not bundle or modify Clippy or its Microsoft-derived assets. See the official [Pets guide](https://learn.chatgpt.com/docs/pets?surface=app).
 
 ## Install with an AI coding agent
 
@@ -46,26 +46,44 @@ Give the prompt for your platform to an AI coding agent with local terminal acce
 ### macOS prompt
 
 ```text
-Install Codex 98 from https://github.com/ghosTM55/codex-win98 on this Mac. Check that Git, npm, and Node.js 22.4 or newer are available. Use ~/Projects/codex-win98: clone it if absent, or update it without discarding local changes. Run npm ci and npm run verify. Do not modify ChatGPT.app, app.asar, binaries, code signatures, shell profiles, or persistent system settings. Report the result and any error.
+Install Codex 98 from https://github.com/ghosTM55/codex-win98 on this Mac. Check that Git, npm, and Node.js 22.4 or newer are available. Choose a local directory for the Git repository: clone it if absent, or update the existing checkout without discarding local changes. From the repository root, run npm ci and npm run verify. Do not modify ChatGPT.app, app.asar, binaries, code signatures, shell profiles, or persistent system settings. Report the repository location, result, and any error.
 ```
 
 ### Windows 11 prompt
 
 ```text
-Using PowerShell, install Codex 98 from https://github.com/ghosTM55/codex-win98 on this Windows 11 PC. Check that Git, npm, and Node.js 22.4 or newer are available. Use $env:USERPROFILE\Projects\codex-win98: clone it if absent, or update it without discarding local changes. Run npm ci and npm run verify. Do not modify the installed app package, app.asar, binaries, code signatures, PowerShell profiles, registry, or persistent system settings. Report the result and any error.
+Using PowerShell, install Codex 98 from https://github.com/ghosTM55/codex-win98 on this Windows 11 PC. Check that Git, npm, and Node.js 22.4 or newer are available. Choose a local directory for the Git repository: clone it if absent, or update the existing checkout without discarding local changes. From the repository root, run npm ci and npm run verify. Do not modify the installed app package, app.asar, binaries, code signatures, PowerShell profiles, registry, or persistent system settings. Report the repository location, result, and any error.
 ```
 
 `npm run verify` checks the project and builds `dist/codex-win98-0.4.0.codedrobe-theme`.
 
 ## Start the theme manually
 
-From the repository:
+Open a terminal and enter the root of the cloned Git repository.
+
+macOS:
 
 ```sh
+cd /path/to/codex-win98
 npm run theme:apply
 ```
 
-This command never closes an existing app. If it returns `CODEDROBE_RESTART_REQUIRED`, save your work first, then run:
+Windows PowerShell:
+
+```powershell
+Set-Location "C:\path\to\codex-win98"
+npm run theme:apply
+```
+
+Replace the example path with the actual location of your Git checkout.
+
+Alternatively, give this prompt to an AI coding agent with local terminal access:
+
+```text
+Find my existing Codex 98 checkout, enter that repository directory, and run npm run theme:apply. Do not modify the ChatGPT app bundle or system settings. If the command returns CODEDROBE_RESTART_REQUIRED, stop and ask me to save my work and approve the restart before running npm run theme:apply:restart. Report the result.
+```
+
+The normal command never closes an existing app. If it returns `CODEDROBE_RESTART_REQUIRED`, save your work first, then run from the same repository directory:
 
 ```sh
 npm run theme:apply:restart
@@ -82,6 +100,8 @@ npm run theme:apply -- --app-path "C:\Path\To\ChatGPT.exe"
 ```
 
 ## Restore the original interface
+
+From the same repository directory:
 
 ```sh
 npm run theme:restore

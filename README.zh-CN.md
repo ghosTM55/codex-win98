@@ -35,9 +35,9 @@ Codex 98 是用于 ChatGPT 桌面客户端 **Codex 视图**的非官方 Windows 
 
 ## 推荐组合：Office Pet
 
-为了获得更完整的经典桌面组合效果，建议在 **Settings → Pets** 中选择 **Office Pet**，然后在任务中输入 `/pet`，或从命令菜单选择 **Wake Pet**。如果客户端的 Pets 列表中没有 Office Pet，可选择现有的其他办公风格 Pet。
+预览图使用的是 [Clippy（Office Pet）](https://github.com/Dimava/codex-clippy)。请单独安装或选择该 Pet，然后在任务中输入 `/pet`，或从命令菜单选择 **Wake Pet**。
 
-Pet 是 ChatGPT 桌面客户端的内置功能，本主题不会安装、捆绑或修改 Pet。具体用法见官方 [Pets 指南](https://learn.chatgpt.com/docs/pets?surface=app)。
+Pet 是 ChatGPT 桌面客户端的内置功能。Codex 98 不会捆绑或修改 Clippy 及其源自 Microsoft 的素材。具体用法见官方 [Pets 指南](https://learn.chatgpt.com/docs/pets?surface=app)。
 
 ## 交给 AI 编程代理安装
 
@@ -46,26 +46,44 @@ Pet 是 ChatGPT 桌面客户端的内置功能，本主题不会安装、捆绑�
 ### macOS 提示词
 
 ```text
-请在这台 Mac 上安装 Codex 98：https://github.com/ghosTM55/codex-win98。检查 Git、npm 和 Node.js 22.4 或更高版本。使用 ~/Projects/codex-win98：目录不存在时克隆，已存在时在不丢弃本地改动的前提下更新。运行 npm ci 和 npm run verify。不得修改 ChatGPT.app、app.asar、二进制文件、代码签名、Shell 配置文件或持久化系统设置。最后报告结果和错误。
+请在这台 Mac 上安装 Codex 98：https://github.com/ghosTM55/codex-win98。检查 Git、npm 和 Node.js 22.4 或更高版本。自行选择一个本地目录作为 Git 仓库：目录不存在时克隆，已存在时在不丢弃本地改动的前提下更新。在仓库根目录运行 npm ci 和 npm run verify。不得修改 ChatGPT.app、app.asar、二进制文件、代码签名、Shell 配置文件或持久化系统设置。最后报告仓库位置、执行结果和错误。
 ```
 
 ### Windows 11 提示词
 
 ```text
-请使用 PowerShell 在这台 Windows 11 电脑上安装 Codex 98：https://github.com/ghosTM55/codex-win98。检查 Git、npm 和 Node.js 22.4 或更高版本。使用 $env:USERPROFILE\Projects\codex-win98：目录不存在时克隆，已存在时在不丢弃本地改动的前提下更新。运行 npm ci 和 npm run verify。不得修改已安装的应用包、app.asar、二进制文件、代码签名、PowerShell 配置文件、注册表或持久化系统设置。最后报告结果和错误。
+请使用 PowerShell 在这台 Windows 11 电脑上安装 Codex 98：https://github.com/ghosTM55/codex-win98。检查 Git、npm 和 Node.js 22.4 或更高版本。自行选择一个本地目录作为 Git 仓库：目录不存在时克隆，已存在时在不丢弃本地改动的前提下更新。在仓库根目录运行 npm ci 和 npm run verify。不得修改已安装的应用包、app.asar、二进制文件、代码签名、PowerShell 配置文件、注册表或持久化系统设置。最后报告仓库位置、执行结果和错误。
 ```
 
 `npm run verify` 会检查项目并生成 `dist/codex-win98-0.4.0.codedrobe-theme`。
 
 ## 手动启动主题
 
-在仓库目录运行：
+打开终端，进入已克隆 Git 仓库的根目录。
+
+macOS：
 
 ```sh
+cd /path/to/codex-win98
 npm run theme:apply
 ```
 
-该命令不会关闭正在运行的客户端。如果返回 `CODEDROBE_RESTART_REQUIRED`，先保存工作，再运行：
+Windows PowerShell：
+
+```powershell
+Set-Location "C:\path\to\codex-win98"
+npm run theme:apply
+```
+
+请将示例路径替换为 Git 仓库的实际位置。
+
+也可以将以下提示词交给具有本机终端权限的 AI 编程代理：
+
+```text
+找到我现有的 Codex 98 仓库，进入该仓库目录并运行 npm run theme:apply。不得修改 ChatGPT 应用包或系统设置。如果返回 CODEDROBE_RESTART_REQUIRED，立即停止，提醒我保存工作，并在获得重启确认后才能运行 npm run theme:apply:restart。最后报告结果。
+```
+
+普通命令不会关闭正在运行的客户端。如果返回 `CODEDROBE_RESTART_REQUIRED`，先保存工作，再从同一仓库目录运行：
 
 ```sh
 npm run theme:apply:restart
@@ -82,6 +100,8 @@ npm run theme:apply -- --app-path "C:\Path\To\ChatGPT.exe"
 ```
 
 ## 恢复原始界面
+
+从同一仓库目录运行：
 
 ```sh
 npm run theme:restore
